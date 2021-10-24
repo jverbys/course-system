@@ -3,7 +3,12 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\DiscriminatorColumn;
+use Doctrine\ORM\Mapping\DiscriminatorMap;
+use Doctrine\ORM\Mapping\InheritanceType;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -11,7 +16,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ORM\Table(name="`user`")
- * @UniqueEntity(fields={"email"}, message="There is already an account with this email")
  */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -37,6 +41,53 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="string")
      */
     private $password;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $firstName;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $lastName;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Course::class, mappedBy="participants")
+     */
+    private $enrolledCourses;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Course::class, mappedBy="owner")
+     */
+    private $createdCourses;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Course::class, mappedBy="moderators")
+     */
+    private $moderatedCourses;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Folder::class, mappedBy="owner")
+     */
+    private $createdFolders;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $name;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $contactPerson;
+
+    public function __construct()
+    {
+        $this->createdCourses = new ArrayCollection();
+        $this->moderatedCourses = new ArrayCollection();
+        $this->createdFolders = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -125,5 +176,167 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    public function getFirstName(): ?string
+    {
+        return $this->firstName;
+    }
+
+    public function setFirstName(string $firstName): self
+    {
+        $this->firstName = $firstName;
+
+        return $this;
+    }
+
+    public function getLastName(): ?string
+    {
+        return $this->lastName;
+    }
+
+    public function setLastName(string $lastName): self
+    {
+        $this->lastName = $lastName;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Course[]
+     */
+    public function getEnrolledCourses(): Collection
+    {
+        return $this->enrolledCourses;
+    }
+
+    public function addEnrolledCourse(Course $course): self
+    {
+        if (!$this->enrolledCourses->contains($course)) {
+            $this->enrolledCourses[] = $course;
+            $course->addParticipant($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEnrolledCourse(Course $course): self
+    {
+        if ($this->enrolledCourses->removeElement($course)) {
+            $course->removeParticipant($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Course[]
+     */
+    public function getCreatedCourses(): Collection
+    {
+        return $this->createdCourses;
+    }
+
+    public function addCreatedCourse(Course $createdCourse): self
+    {
+        if (!$this->createdCourses->contains($createdCourse)) {
+            $this->createdCourses[] = $createdCourse;
+            $createdCourse->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCreatedCourse(Course $createdCourse): self
+    {
+        if ($this->createdCourses->removeElement($createdCourse)) {
+            // set the owning side to null (unless already changed)
+            if ($createdCourse->getOwner() === $this) {
+                $createdCourse->setOwner(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Course[]
+     */
+    public function getModeratedCourses(): Collection
+    {
+        return $this->moderatedCourses;
+    }
+
+    public function addModeratedCourse(Course $moderatedCourse): self
+    {
+        if (!$this->moderatedCourses->contains($moderatedCourse)) {
+            $this->moderatedCourses[] = $moderatedCourse;
+            $moderatedCourse->addModerator($this);
+        }
+
+        return $this;
+    }
+
+    public function removeModeratedCourse(Course $moderatedCourse): self
+    {
+        if ($this->moderatedCourses->removeElement($moderatedCourse)) {
+            $moderatedCourse->removeModerator($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Folder[]
+     */
+    public function getCreatedFolders(): Collection
+    {
+        return $this->createdFolders;
+    }
+
+    public function addCreatedFolder(Folder $createdFolder): self
+    {
+        if (!$this->createdFolders->contains($createdFolder)) {
+            $this->createdFolders[] = $createdFolder;
+            $createdFolder->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCreatedFolder(Folder $createdFolder): self
+    {
+        if ($this->createdFolders->removeElement($createdFolder)) {
+            // set the owning side to null (unless already changed)
+            if ($createdFolder->getOwner() === $this) {
+                $createdFolder->setOwner(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function getContactPerson(): ?string
+    {
+        return $this->contactPerson;
+    }
+
+    public function setContactPerson(string $contactPerson): self
+    {
+        $this->contactPerson = $contactPerson;
+
+        return $this;
     }
 }
