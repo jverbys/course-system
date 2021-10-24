@@ -8,7 +8,7 @@ type Props = {
 const Layout = ({children}: Props) => {
     return (
         <>
-            <Navbar bg="light" expand="lg">
+            <Navbar fixed="top" bg="dark" variant="dark" expand="lg">
                 <Container>
                     <Navbar.Brand href="#home">Course system</Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -27,7 +27,7 @@ const Layout = ({children}: Props) => {
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
-            <Container>
+            <Container style={{marginTop: '80px'}}>
                 {children}
             </Container>
         </>
