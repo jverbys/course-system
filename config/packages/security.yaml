@@ -23,7 +23,7 @@ security:
             form_login:
                 login_path: login
                 check_path: login
-                enable_csrf: true
+#                enable_csrf: true
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
@@ -36,6 +36,6 @@ security:
     access_control:
          - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
          - { path: ^/register, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-         - { path: ^/api, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+         - { path: ^/api, roles: ROLE_USER }
          - { path: ^/, roles: ROLE_USER }
         # - { path: ^/profile, roles: ROLE_USER }

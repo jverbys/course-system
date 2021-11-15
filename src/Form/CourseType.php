@@ -24,17 +24,19 @@ class CourseType extends AbstractType
                     new NotNull(),
                 ],
             ])
-            ->add('description', TextType::class)
+            ->add('description', TextType::class, [
+                'constraints' => [
+                    new NotNull(),
+                ],
+            ])
             ->add('startDate', DateTimeType::class, [
-                'input' => 'datetime_immutable',
-                'input_format' => 'Y-m-d',
+                'widget' => 'single_text',
                 'constraints' => [
                     new NotNull(),
                 ],
             ])
             ->add('endDate', DateTimeType::class, [
-                'input' => 'datetime_immutable',
-                'input_format' => 'Y-m-d',
+                'widget' => 'single_text',
                 'constraints' => [
                     new NotNull(),
                 ],
