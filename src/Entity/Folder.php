@@ -59,7 +59,6 @@ class Folder
 
     public function __construct()
     {
-        $this->folders = new ArrayCollection();
         $this->files = new ArrayCollection();
         $this->subFolders = new ArrayCollection();
     }
@@ -81,7 +80,7 @@ class Folder
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->createdAt;
     }
