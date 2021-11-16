@@ -2,17 +2,17 @@
 
 namespace App\Dto\Response\Transformer;
 
-use App\Dto\Response\CourseResponseDto;
+use App\Dto\Response\CourseIndexDto;
 use App\Entity\Course;
 
-class CourseResponseDtoTransformer extends AbstractResponseDtoTransformer
+class CourseIndexDtoTransformer extends AbstractResponseDtoTransformer
 {
     /**
      * @var Course $object
      */
-    public function transformFromObject($object): CourseResponseDto
+    public function transformFromObject($object): CourseIndexDto
     {
-        $dto = new CourseResponseDto();
+        $dto = new CourseIndexDto();
         $dto->id = $object->getId();
         $dto->name = $object->getName();
         $dto->description = $object->getDescription();

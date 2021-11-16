@@ -6,7 +6,7 @@ namespace App\Dto\Response;
 
 use JMS\Serializer\Annotation as Serialization;
 
-class CourseResponseDto
+class CourseIndexDto
 {
     /**
      * @Serialization\Type("int")
