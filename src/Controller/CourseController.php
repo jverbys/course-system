@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Dto\Response\Transformer\CourseResponseDtoTransformer;
 use App\Entity\Course;
 use App\Entity\User;
 use App\Form\CourseType;
@@ -15,6 +16,13 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class CourseController extends AbstractApiController
 {
+    private CourseResponseDtoTransformer $courseResponseDtoTransformer;
+
+    public function __construct(CourseResponseDtoTransformer $courseResponseDtoTransformer)
+    {
+        $this->courseResponseDtoTransformer = $courseResponseDtoTransformer;
+    }
+
     /**
      * @Route("/api/courses", methods={"GET"}, name="course_index")
      */
@@ -22,7 +30,9 @@ class CourseController extends AbstractApiController
     {
         $courses = $repo->findAll();
 
-        return $this->respond($courses);
+        $dto = $this->courseResponseDtoTransformer->transformFromObjects($courses);
+
+        return $this->respond($dto);
     }
 
     /**
