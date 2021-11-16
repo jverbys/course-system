@@ -37,4 +37,14 @@ class CourseDto
      * @Serialization\Type("array<App\Dto\Response\FolderDto>")
      */
     public iterable $folders;
+
+    /**
+     * @Serialization\Type("bool")
+     */
+    public bool $userIsOwner;
+
+    /**
+     * @Serialization\Type("bool")
+     */
+    public bool $userIsModerator;
 }
