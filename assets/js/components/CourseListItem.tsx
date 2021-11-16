@@ -1,22 +1,27 @@
 import React from "react";
-import {Button, Col, ListGroup, Row} from "react-bootstrap";
+import {Button, ListGroup} from "react-bootstrap";
+import {ICourse} from "./CourseList";
 
-const CourseListItem = () => {
+type Props = {
+    course: ICourse,
+}
+
+const CourseListItem = ({ course }: Props) => {
     return (
         <ListGroup.Item
             as="li"
             className="d-flex justify-content-between align-items-center flex-wrap"
         >
             <div className="ms-2 me-auto">
-                <div className="fw-bold">Course name</div>
-                Course description
+                <div className="fw-bold">{course.name}</div>
+                {course.description}
             </div>
             <div className="ms-2 me-auto">
                 <div>
-                    <b>Starts:</b> 1970-01-01
+                    <b>Starts:</b> {course.startDate}
                 </div>
                 <div>
-                    <b>Ends: </b> 1970-01-01
+                    <b>Ends: </b> {course.endDate}
                 </div>
             </div>
             <div className="ms-2 me-auto">

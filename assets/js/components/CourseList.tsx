@@ -1,11 +1,40 @@
-import React from "react";
-import { ListGroup } from "react-bootstrap";
+import React, {useEffect, useState} from "react";
+import {ListGroup} from "react-bootstrap";
 import CourseListItem from "./CourseListItem";
+import axios from "axios";
+
+const client = axios.create({
+    baseURL: '/api'
+});
+
+export interface ICourse {
+    id: string,
+    name: string,
+    description: string,
+    startDate: string,
+    endDate: string,
+}
 
 const CourseList = () => {
+    const [courses, setCourses] = useState<ICourse[]>([]);
+
+    useEffect(() => {
+        const getCourses = async () => {
+            return await client.get('/courses');
+        }
+
+        getCourses().then(response => {
+            setCourses(response.data);
+        });
+    }, []);
+
     return (
         <ListGroup as="ol" numbered>
-            <CourseListItem />
+            {courses.map(course => {
+                return (
+                    <CourseListItem course={course} />
+                )
+            })}
         </ListGroup>
     )
 }
