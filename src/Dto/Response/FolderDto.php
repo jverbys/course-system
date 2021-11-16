@@ -22,7 +22,7 @@ class FolderDto
      * @Serialization\Type("array<App\Dto\Response\FileDto>")
      */
     public iterable $files;
-    
+
     /**
      * @Serialization\Type("array<App\Dto\Response\FolderDto>")
      */

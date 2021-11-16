@@ -63,7 +63,9 @@ class CourseController extends AbstractApiController
         $em->persist($course);
         $em->flush();
 
-        return $this->respond($course, Response::HTTP_CREATED);
+        $dto = $this->courseDtoTransformer->transformFromObject($course);
+
+        return $this->respond($dto, Response::HTTP_CREATED);
     }
 
     /**
@@ -108,7 +110,9 @@ class CourseController extends AbstractApiController
         $em->persist($course);
         $em->flush();
 
-        return $this->respond($course);
+        $dto = $this->courseDtoTransformer->transformFromObject($course);
+
+        return $this->respond($dto);
     }
 
     /**
