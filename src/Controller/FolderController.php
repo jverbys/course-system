@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Dto\Response\Transformer\FolderDtoTransformer;
 use App\Entity\Folder;
 use App\Entity\User;
 use App\Form\FolderType;
@@ -16,6 +17,13 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class FolderController extends AbstractApiController
 {
+    private FolderDtoTransformer $folderDtoTransformer;
+
+    public function __construct(FolderDtoTransformer $folderDtoTransformer)
+    {
+        $this->folderDtoTransformer = $folderDtoTransformer;
+    }
+
     /**
      * @Route("/api/courses/{courseId}/folders", methods={"GET"}, name="folder_index")
      */
@@ -25,7 +33,9 @@ class FolderController extends AbstractApiController
             'course' => $request->get('courseId'),
         ]);
 
-        return $this->respond($folders);
+        $dto = $this->folderDtoTransformer->transformFromObjects($folders);
+
+        return $this->respond($dto);
     }
 
     /**
@@ -67,7 +77,9 @@ class FolderController extends AbstractApiController
         $em->persist($folder);
         $em->flush();
 
-        return $this->respond($folder, Response::HTTP_CREATED);
+        $dto = $this->folderDtoTransformer->transformFromObject($folder);
+
+        return $this->respond($dto, Response::HTTP_CREATED);
     }
 
     /**
@@ -84,7 +96,9 @@ class FolderController extends AbstractApiController
             return $this->respond('Folder not found!', Response::HTTP_NOT_FOUND);
         }
 
-        return $this->respond($folder);
+        $dto = $this->folderDtoTransformer->transformFromObject($folder);
+
+        return $this->respond($dto);
     }
 
     /**
@@ -123,7 +137,9 @@ class FolderController extends AbstractApiController
         $em->persist($folder);
         $em->flush();
 
-        return $this->respond($folder);
+        $dto = $this->folderDtoTransformer->transformFromObject($folder);
+
+        return $this->respond($dto);
     }
 
     /**

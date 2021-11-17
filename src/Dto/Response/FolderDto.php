@@ -27,5 +27,4 @@ class FolderDto
      * @Serialization\Type("array<App\Dto\Response\FolderDto>")
      */
     public iterable $subFolders;
-
 }
