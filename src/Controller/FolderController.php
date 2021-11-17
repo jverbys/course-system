@@ -15,6 +15,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * @Route("/api", name="folder_")
+ */
 class FolderController extends AbstractApiController
 {
     private FolderDtoTransformer $folderDtoTransformer;
@@ -25,7 +28,7 @@ class FolderController extends AbstractApiController
     }
 
     /**
-     * @Route("/api/courses/{courseId}/folders", methods={"GET"}, name="folder_index")
+     * @Route("/courses/{courseId}/folders", methods={"GET"}, name="index")
      */
     public function indexAction(Request $request, FolderRepository $repo): Response
     {
@@ -39,7 +42,7 @@ class FolderController extends AbstractApiController
     }
 
     /**
-     * @Route("/api/courses/{courseId}/folders", methods={"POST"}, name="folder_create")
+     * @Route("/courses/{courseId}/folders", methods={"POST"}, name="create")
      */
     public function createAction(Request $request, CourseRepository $repo, EntityManagerInterface $em): Response
     {
@@ -83,12 +86,11 @@ class FolderController extends AbstractApiController
     }
 
     /**
-     * @Route("/api/courses/{courseId}/folders/{folderId}", methods={"GET"}, name="folder_show")
+     * @Route("/folders/{folderId}", methods={"GET"}, name="show")
      */
     public function showAction(Request $request, FolderRepository $repo): Response
     {
         $folder = $repo->findOneBy([
-            'course' => $request->get('courseId'),
             'id' => $request->get('folderId'),
         ]);
 
@@ -102,12 +104,11 @@ class FolderController extends AbstractApiController
     }
 
     /**
-     * @Route("/api/courses/{courseId}/folders/{folderId}", methods={"PATCH"}, name="folder_update")
+     * @Route("/folders/{folderId}", methods={"PATCH"}, name="update")
      */
     public function updateAction(Request $request, FolderRepository $repo, EntityManagerInterface $em): Response
     {
         $folder = $repo->findOneBy([
-            'course' => $request->get('courseId'),
             'id' => $request->get('folderId'),
         ]);
 
@@ -143,12 +144,11 @@ class FolderController extends AbstractApiController
     }
 
     /**
-     * @Route("/api/courses/{courseId}/folders/{folderId}", methods={"DELETE"}, name="folder_delete")
+     * @Route("/folders/{folderId}", methods={"DELETE"}, name="delete")
      */
     public function deleteAction(Request $request, FolderRepository $repo, EntityManagerInterface $em): Response
     {
         $folder = $repo->findOneBy([
-            'course' => $request->get('courseId'),
             'id' => $request->get('folderId'),
         ]);
 
