@@ -15,6 +15,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * @Route("/api", name="course_")
+ */
 class CourseController extends AbstractApiController
 {
     private CourseIndexDtoTransformer $courseIndexDtoTransformer;
@@ -27,7 +30,7 @@ class CourseController extends AbstractApiController
     }
 
     /**
-     * @Route("/api/courses", methods={"GET"}, name="course_index")
+     * @Route("/courses", methods={"GET"}, name="index")
      */
     public function indexAction(CourseRepository $repo): Response
     {
@@ -39,7 +42,7 @@ class CourseController extends AbstractApiController
     }
 
     /**
-     * @Route("/api/courses", methods={"POST"}, name="course_create")
+     * @Route("/courses", methods={"POST"}, name="create")
      */
     public function createAction(Request $request, EntityManagerInterface $em): Response
     {
@@ -69,7 +72,7 @@ class CourseController extends AbstractApiController
     }
 
     /**
-     * @Route("/api/courses/{courseId}", methods={"GET"}, name="course_show")
+     * @Route("/courses/{courseId}", methods={"GET"}, name="show")
      */
     public function showAction(Request $request, CourseRepository $repo): Response
     {
@@ -85,7 +88,7 @@ class CourseController extends AbstractApiController
     }
 
     /**
-     * @Route("/api/courses/{courseId}", methods={"PATCH"}, name="course_update")
+     * @Route("/courses/{courseId}", methods={"PATCH"}, name="update")
      */
     public function updateAction(Request $request, CourseRepository $repo, EntityManagerInterface $em): Response
     {
@@ -116,7 +119,7 @@ class CourseController extends AbstractApiController
     }
 
     /**
-     * @Route("/api/courses/{courseId}", methods={"DELETE"}, name="course_delete")
+     * @Route("/courses/{courseId}", methods={"DELETE"}, name="delete")
      */
     public function deleteAction(Request $request, CourseRepository $repo, EntityManagerInterface $em): Response
     {
