@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import {Button, ListGroup} from "react-bootstrap";
 import {ICourse} from "./CourseList";
 
@@ -7,6 +7,8 @@ type Props = {
 }
 
 const CourseListItem = ({ course }: Props) => {
+    const [userIsEnrolled, setUserIsEnrolled] = useState(course.userIsEnrolled);
+
     return (
         <ListGroup.Item
             as="li"
@@ -28,11 +30,8 @@ const CourseListItem = ({ course }: Props) => {
                 <Button variant="primary" size="sm">
                     View
                 </Button>
-                <Button variant="success" size="sm">
-                    Enroll
-                </Button>
-                <Button variant="danger" size="sm">
-                    Unroll
+                <Button variant={userIsEnrolled ? 'danger' : 'success'} size="sm">
+                    {userIsEnrolled ? 'Unroll' : 'Enroll'}
                 </Button>
             </div>
         </ListGroup.Item>

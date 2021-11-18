@@ -13,6 +13,7 @@ export interface ICourse {
     description: string,
     startDate: string,
     endDate: string,
+    userIsEnrolled: boolean,
 }
 
 const CourseList = () => {
