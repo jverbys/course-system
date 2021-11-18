@@ -35,6 +35,7 @@ class CourseDtoTransformer extends AbstractResponseDtoTransformer
         $user = $this->security->getUser();
         $dto->userIsOwner = $object->getOwner() === $user;
         $dto->userIsModerator = in_array($user, $object->getModerators()->getValues());
+        $dto->userIsEnrolled = in_array($user, $object->getParticipants()->getValues());
 
         return $dto;
     }

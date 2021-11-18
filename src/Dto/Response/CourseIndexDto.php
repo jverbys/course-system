@@ -32,4 +32,9 @@ class CourseIndexDto
      * @Serialization\Type("DateTime<'Y-m-d H:i:s'>")
      */
     public \DateTimeInterface $endDate;
+
+    /**
+     * @Serialization\Type("bool")
+     */
+    public bool $userIsEnrolled;
 }
