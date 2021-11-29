@@ -6,6 +6,7 @@ use App\Dto\Response\CourseDto;
 use App\Entity\Course;
 use App\Entity\User;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class CourseDtoTransformer extends AbstractResponseDtoTransformer
 {
@@ -31,7 +32,7 @@ class CourseDtoTransformer extends AbstractResponseDtoTransformer
         $dto->endDate = $object->getEndDate();
         $dto->folders = $this->folderDtoTransformer->transformFromObjects($object->getFolders());
 
-        /** @var User $user */
+        /** @var UserInterface $user */
         $user = $this->security->getUser();
         $dto->userIsOwner = $object->getOwner() === $user;
         $dto->userIsModerator = in_array($user, $object->getModerators()->getValues()) ||

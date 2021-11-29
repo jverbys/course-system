@@ -6,6 +6,7 @@ use App\Dto\Response\CourseIndexDto;
 use App\Entity\Course;
 use App\Entity\User;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class CourseIndexDtoTransformer extends AbstractResponseDtoTransformer
 {
@@ -28,7 +29,7 @@ class CourseIndexDtoTransformer extends AbstractResponseDtoTransformer
         $dto->startDate = $object->getStartDate();
         $dto->endDate = $object->getEndDate();
 
-        /** @var User $user */
+        /** @var UserInterface $user */
         $user = $this->security->getUser();
         $dto->userIsEnrolled = in_array($user, $object->getParticipants()->getValues());
         $dto->userCanEnroll = !in_array(User::ROLE_COMPANY, $user->getRoles());
