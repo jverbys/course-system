@@ -1,15 +1,14 @@
-import React, {useState} from "react";
+import React from "react";
 import {Button, ListGroup} from "react-bootstrap";
 import {ICourseIndex} from "./CourseList";
 import {Link} from "react-router-dom";
 
 type Props = {
     course: ICourseIndex,
+    changeEnrollmentStatus: (courseId: number) => void,
 }
 
-const CourseListItem = ({ course }: Props) => {
-    const [userIsEnrolled, setUserIsEnrolled] = useState(course.userIsEnrolled);
-
+const CourseListItem = ({ course, changeEnrollmentStatus }: Props) => {
     return (
         <ListGroup.Item
             as="li"
@@ -33,8 +32,13 @@ const CourseListItem = ({ course }: Props) => {
                         View
                     </Button>
                 </Link>
-                <Button variant={userIsEnrolled ? 'danger' : 'success'} style={{ marginLeft: '10px' }} size="sm">
-                    {userIsEnrolled ? 'Unroll' : 'Enroll'}
+                <Button
+                    variant={course.userIsEnrolled ? 'danger' : 'success'}
+                    style={{ marginLeft: '10px' }}
+                    size="sm"
+                    onClick={() => changeEnrollmentStatus(course.id)}
+                >
+                    {course.userIsEnrolled ? 'Unroll' : 'Enroll'}
                 </Button>
             </div>
         </ListGroup.Item>

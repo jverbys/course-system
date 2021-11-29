@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 import axios from "axios";
-import {Button, Card, ListGroup} from "react-bootstrap";
+import {Button, Card} from "react-bootstrap";
 import Folder from "./Folder";
 
 const client = axios.create({
@@ -47,12 +47,35 @@ const Course = () => {
         });
     }, []);
 
+    const changeEnrollmentStatus = () => {
+        let url = `/courses/${course?.id}/enroll`;
+        if (course?.userIsEnrolled) {
+            url = `/courses/${course?.id}/unroll`;
+        }
+
+        let existingCourse = {
+            ...course
+        };
+
+        client.post(url)
+            .then(() => {
+                existingCourse.userIsEnrolled = !existingCourse.userIsEnrolled;
+                // @ts-ignore
+                setCourse(existingCourse);
+            });
+    }
+
     return (
         <Card>
             <Card.Header className="d-flex justify-content-between align-items-center">
                 {course?.name}
-                <Button variant="success" size="sm">
-                    Enroll
+                <Button
+                    variant={course?.userIsEnrolled ? 'danger' : 'success'}
+                    style={{ marginLeft: '10px' }}
+                    size="sm"
+                    onClick={() => changeEnrollmentStatus()}
+                >
+                    {course?.userIsEnrolled ? 'Unroll' : 'Enroll'}
                 </Button>
             </Card.Header>
             <Card.Body>

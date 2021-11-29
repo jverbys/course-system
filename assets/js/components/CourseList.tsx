@@ -8,7 +8,7 @@ const client = axios.create({
 });
 
 export interface ICourseIndex {
-    id: string,
+    id: number,
     name: string,
     description: string,
     startDate: string,
@@ -29,11 +29,31 @@ const CourseList = () => {
         });
     }, []);
 
+    const changeEnrollmentStatus = (id: number) => {
+        const course = courses.find(course => course.id === id);
+
+        let url = `/courses/${course?.id}/enroll`;
+        if (course?.userIsEnrolled) {
+            url = `/courses/${course?.id}/unroll`;
+        }
+
+        const existingCourses = [...courses];
+        client.post(url)
+            .then(() => {
+                existingCourses.forEach(existingCourse => {
+                    if (existingCourse.id === course?.id) {
+                        existingCourse.userIsEnrolled = !existingCourse.userIsEnrolled;
+                    }
+                })
+                setCourses(existingCourses);
+            });
+    }
+
     return (
         <ListGroup as="ol" numbered>
             {courses.map(course => {
                 return (
-                    <CourseListItem key={course.id} course={course} />
+                    <CourseListItem key={course.id} course={course} changeEnrollmentStatus={changeEnrollmentStatus} />
                 )
             })}
         </ListGroup>
