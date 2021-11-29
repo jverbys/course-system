@@ -1,80 +1,36 @@
-import React, {ChangeEvent, useState} from "react";
-import Layout from "./components/Layout";
-import {Button, Card, Form, Modal} from "react-bootstrap";
-import CourseList from "./components/CourseList";
-import DateTimeSelector from "./components/DateTimeSelector";
+import React from "react";
+import {Container, Nav, Navbar, NavDropdown} from "react-bootstrap";
+import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
+import Courses from "./components/Courses";
 
 const App = () => {
-    const [show, setShow] = useState(false);
-    const [name, setName] = useState('');
-    const [description, setDescription] = useState('');
-    const [startDate, setStartDate] = useState('');
-    const [endDate, setEndDate] = useState('');
-
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
-
     return (
-        <Layout>
-            <Card>
-                <Card.Header className="d-flex justify-content-between align-items-center">
-                    Courses
-                    <Button variant="primary" size="sm" onClick={handleShow}>
-                        Create
-                    </Button>
-                </Card.Header>
-                <Card.Body>
-                    <CourseList />
-                </Card.Body>
-            </Card>
-
-            <Modal show={show} onHide={handleClose}>
-                <Modal.Header closeButton>
-                    <Modal.Title>New course</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Form>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Name</Form.Label>
-                            <Form.Control
-                                type="text"
-                                placeholder="Name"
-                                onChange={(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
-                                    setName(e.target.value)}
-                            />
-                        </Form.Group>
-
-                        <Form.Group className="mb-3">
-                            <Form.Label>Description</Form.Label>
-                            <Form.Control
-                                type="text"
-                                placeholder="Description"
-                                onChange={(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
-                                    setDescription(e.target.value)}
-                            />
-                        </Form.Group>
-
-                        <Form.Group className="mb-3">
-                            <Form.Label>Start date</Form.Label>
-                            <DateTimeSelector setDate={setStartDate} placeholder="Start date" />
-                        </Form.Group>
-
-                        <Form.Group>
-                            <Form.Label>End date</Form.Label>
-                            <DateTimeSelector setDate={setEndDate} placeholder="End date" />
-                        </Form.Group>
-                    </Form>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={handleClose}>
-                        Close
-                    </Button>
-                    <Button variant="primary" onClick={handleClose}>
-                        Save Changes
-                    </Button>
-                </Modal.Footer>
-            </Modal>
-        </Layout>
+        <Router>
+            <Navbar fixed="top" bg="dark" variant="dark" expand="lg">
+                <Container>
+                    <Navbar.Brand href="#home">Course system</Navbar.Brand>
+                    <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                    <Navbar.Collapse id="basic-navbar-nav">
+                        <Nav className="me-auto">
+                            <Nav.Link href="#home">Home</Nav.Link>
+                            <Nav.Link href="#link">Link</Nav.Link>
+                            <NavDropdown title="Dropdown" id="basic-nav-dropdown">
+                                <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
+                                <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
+                                <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
+                                <NavDropdown.Divider />
+                                <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
+                            </NavDropdown>
+                        </Nav>
+                    </Navbar.Collapse>
+                </Container>
+            </Navbar>
+            <Container style={{marginTop: '80px'}}>
+                <Routes>
+                    <Route path="/" element={<Courses />} />
+                </Routes>
+            </Container>
+        </Router>
     )
 };
 
