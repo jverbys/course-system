@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {ChangeEvent, useState} from "react";
 import Layout from "./components/Layout";
 import {Button, Card, Form, Modal} from "react-bootstrap";
 import CourseList from "./components/CourseList";
@@ -6,6 +6,10 @@ import DateTimeSelector from "./components/DateTimeSelector";
 
 const App = () => {
     const [show, setShow] = useState(false);
+    const [name, setName] = useState('');
+    const [description, setDescription] = useState('');
+    const [startDate, setStartDate] = useState('');
+    const [endDate, setEndDate] = useState('');
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -32,22 +36,32 @@ const App = () => {
                     <Form>
                         <Form.Group className="mb-3">
                             <Form.Label>Name</Form.Label>
-                            <Form.Control type="text" placeholder="Name" />
+                            <Form.Control
+                                type="text"
+                                placeholder="Name"
+                                onChange={(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+                                    setName(e.target.value)}
+                            />
                         </Form.Group>
 
                         <Form.Group className="mb-3">
                             <Form.Label>Description</Form.Label>
-                            <Form.Control type="text" placeholder="Description" />
+                            <Form.Control
+                                type="text"
+                                placeholder="Description"
+                                onChange={(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+                                    setDescription(e.target.value)}
+                            />
                         </Form.Group>
 
                         <Form.Group className="mb-3">
                             <Form.Label>Start date</Form.Label>
-                            <DateTimeSelector placeholder="Start date" />
+                            <DateTimeSelector setDate={setStartDate} placeholder="Start date" />
                         </Form.Group>
 
                         <Form.Group>
                             <Form.Label>End date</Form.Label>
-                            <DateTimeSelector placeholder="End date" />
+                            <DateTimeSelector setDate={setEndDate} placeholder="End date" />
                         </Form.Group>
                     </Form>
                 </Modal.Body>

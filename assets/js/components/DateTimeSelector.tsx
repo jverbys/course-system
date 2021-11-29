@@ -1,20 +1,19 @@
-import React, {useState} from "react";
+import React from "react";
 import "react-datetime/css/react-datetime.css";
 import Datetime from 'react-datetime';
 
 type Props = {
+    setDate: (date: string) => void,
     placeholder?: string
 }
 
-const DateTimeSelector = ({ placeholder }: Props) => {
-    const [date, setDate] = useState();
-
+const DateTimeSelector = ({ setDate, placeholder }: Props) => {
     return (
         <Datetime
             dateFormat={'YYYY-MM-DD'}
             timeFormat={'HH:mm:ss'}
             inputProps={{ placeholder: placeholder ?? ''}}
-            onChange={(date: any) => setDate(date)}
+            onChange={(date: any) => setDate(date.format('YYYY-MM-DD HH:mm:ss'))}
         />
     )
 }
