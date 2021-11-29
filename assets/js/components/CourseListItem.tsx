@@ -30,7 +30,7 @@ const CourseListItem = ({ course }: Props) => {
                 <Button variant="primary" size="sm">
                     View
                 </Button>
-                <Button variant={userIsEnrolled ? 'danger' : 'success'} size="sm">
+                <Button variant={userIsEnrolled ? 'danger' : 'success'} style={{ marginLeft: '10px' }} size="sm">
                     {userIsEnrolled ? 'Unroll' : 'Enroll'}
                 </Button>
             </div>

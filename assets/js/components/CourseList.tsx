@@ -33,7 +33,7 @@ const CourseList = () => {
         <ListGroup as="ol" numbered>
             {courses.map(course => {
                 return (
-                    <CourseListItem course={course} />
+                    <CourseListItem key={course.id} course={course} />
                 )
             })}
         </ListGroup>

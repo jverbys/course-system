@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import Layout from "./components/Layout";
 import {Button, Card, Form, Modal} from "react-bootstrap";
 import CourseList from "./components/CourseList";
-import DateSelector from "./components/DateSelector";
+import DateTimeSelector from "./components/DateTimeSelector";
 
 const App = () => {
     const [show, setShow] = useState(false);
@@ -31,15 +31,23 @@ const App = () => {
                 <Modal.Body>
                     <Form>
                         <Form.Group className="mb-3">
+                            <Form.Label>Name</Form.Label>
                             <Form.Control type="text" placeholder="Name" />
                         </Form.Group>
 
                         <Form.Group className="mb-3">
+                            <Form.Label>Description</Form.Label>
                             <Form.Control type="text" placeholder="Description" />
                         </Form.Group>
 
+                        <Form.Group className="mb-3">
+                            <Form.Label>Start date</Form.Label>
+                            <DateTimeSelector placeholder="Start date" />
+                        </Form.Group>
+
                         <Form.Group>
-                            <DateSelector />
+                            <Form.Label>End date</Form.Label>
+                            <DateTimeSelector placeholder="End date" />
                         </Form.Group>
                     </Form>
                 </Modal.Body>
