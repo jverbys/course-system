@@ -31,6 +31,7 @@ class CourseIndexDtoTransformer extends AbstractResponseDtoTransformer
         /** @var User $user */
         $user = $this->security->getUser();
         $dto->userIsEnrolled = in_array($user, $object->getParticipants()->getValues());
+        $dto->userCanEnroll = !in_array(User::ROLE_COMPANY, $user->getRoles());
 
         return $dto;
     }

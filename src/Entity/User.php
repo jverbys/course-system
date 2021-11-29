@@ -19,6 +19,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
+    const ROLE_ADMIN = 'ROLE_ADMIN';
+    const ROLE_COMPANY = 'ROLE_COMPANY';
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue

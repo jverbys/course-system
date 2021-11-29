@@ -52,4 +52,9 @@ class CourseDto
     * @Serialization\Type("bool")
     */
     public bool $userIsEnrolled;
+
+    /**
+     * @Serialization\Type("bool")
+     */
+    public bool $userCanEnroll;
 }
