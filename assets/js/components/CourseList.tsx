@@ -7,7 +7,7 @@ const client = axios.create({
     baseURL: '/api'
 });
 
-export interface ICourse {
+export interface ICourseIndex {
     id: string,
     name: string,
     description: string,
@@ -17,7 +17,7 @@ export interface ICourse {
 }
 
 const CourseList = () => {
-    const [courses, setCourses] = useState<ICourse[]>([]);
+    const [courses, setCourses] = useState<ICourseIndex[]>([]);
 
     useEffect(() => {
         const getCourses = async () => {

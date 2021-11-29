@@ -1,9 +1,10 @@
 import React, {useState} from "react";
 import {Button, ListGroup} from "react-bootstrap";
-import {ICourse} from "./CourseList";
+import {ICourseIndex} from "./CourseList";
+import {Link} from "react-router-dom";
 
 type Props = {
-    course: ICourse,
+    course: ICourseIndex,
 }
 
 const CourseListItem = ({ course }: Props) => {
@@ -27,9 +28,11 @@ const CourseListItem = ({ course }: Props) => {
                 </div>
             </div>
             <div className="ms-2 me-auto">
-                <Button variant="primary" size="sm">
-                    View
-                </Button>
+                <Link to={`/courses/${course.id}`}>
+                    <Button variant="primary" size="sm">
+                        View
+                    </Button>
+                </Link>
                 <Button variant={userIsEnrolled ? 'danger' : 'success'} style={{ marginLeft: '10px' }} size="sm">
                     {userIsEnrolled ? 'Unroll' : 'Enroll'}
                 </Button>
