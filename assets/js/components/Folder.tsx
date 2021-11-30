@@ -3,9 +3,11 @@ import {IFolder} from "./Course";
 
 type Props = {
     folder: IFolder,
+    canEdit?: boolean,
+    openModal: (folderId: number) => void,
 }
 
-const Folder = ({ folder }: Props) => {
+const Folder = ({ folder, canEdit, openModal }: Props) => {
     return (
         <div style={{ marginLeft: '20px' }}>
             <div className="d-flex align-items-center">
@@ -13,9 +15,15 @@ const Folder = ({ folder }: Props) => {
 
                 {folder.name}
 
-                <a style={{ marginLeft: '5px' }} href="#">
-                    +
-                </a>
+                {
+                    canEdit &&
+                    <a style={{ marginLeft: '5px', textDecoration: 'none' }}
+                       href="#"
+                       onClick={() => openModal(folder.id)}
+                    >
+                        +
+                    </a>
+                }
             </div>
             {folder.files.map(file => {
                 return (
@@ -27,7 +35,12 @@ const Folder = ({ folder }: Props) => {
             })}
             {folder.subFolders.map(subFolder => {
                 return (
-                    <Folder key={subFolder.id} folder={subFolder} />
+                    <Folder
+                        key={subFolder.id}
+                        folder={subFolder}
+                        canEdit={canEdit}
+                        openModal={openModal}
+                    />
                 )
             })}
         </div>
