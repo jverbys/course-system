@@ -4,6 +4,7 @@ import {Button, Card} from "react-bootstrap";
 import Folder from "./Folder";
 import FolderModal from "./FolderModal";
 import client from "../Client";
+import FolderModalOpenBtn from "./FolderModalOpenBtn";
 
 interface ICourse {
     id: number,
@@ -102,6 +103,10 @@ const Course = () => {
                     </Card>
                     <Card style={{ marginTop: '16px'}}>
                         <Card.Body>
+                            {
+                                (course?.userIsModerator || course?.userIsOwner) &&
+                                <FolderModalOpenBtn onClick={() => changeFolderModalVisibility()} />
+                            }
                             {folders.map(folder => {
                                 return (
                                     <Folder

@@ -1,5 +1,6 @@
 import React from "react";
 import {IFolder} from "./Course";
+import FolderModalOpenBtn from "./FolderModalOpenBtn";
 
 type Props = {
     folder: IFolder,
@@ -17,12 +18,7 @@ const Folder = ({ folder, canEdit, openModal }: Props) => {
 
                 {
                     canEdit &&
-                    <a style={{ marginLeft: '5px', textDecoration: 'none' }}
-                       href="#"
-                       onClick={() => openModal(folder.id)}
-                    >
-                        +
-                    </a>
+                    <FolderModalOpenBtn onClick={() => openModal(folder.id)} />
                 }
             </div>
             {folder.files.map(file => {

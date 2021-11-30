@@ -46,8 +46,8 @@ const FolderModal = ({ show, courseId, parentFolderId, closeModal, reloadFolders
                 <Form>
                     <Form.Group className="mb-3">
                         <Form.Label>Type</Form.Label>
-                        <Form.Select onChange={(e: any) => {setType(e.target.value)}}>
-                            <option selected disabled hidden>Select type</option>
+                        <Form.Select onChange={(e: any) => {setType(e.target.value)}} defaultValue="">
+                            <option value="" disabled hidden>Select type</option>
                             <option value="folder">Folder</option>
                             <option value="file">File</option>
                         </Form.Select>
