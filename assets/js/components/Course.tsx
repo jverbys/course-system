@@ -95,6 +95,7 @@ const Course = () => {
                 </Card.Header>
                 <Card.Body>
                     <Card>
+                        <Card.Header>Course information</Card.Header>
                         <Card.Body>
                             <div>{course?.description}</div>
                             <div>Starts: {course?.startDate}</div>
@@ -102,6 +103,7 @@ const Course = () => {
                         </Card.Body>
                     </Card>
                     <Card style={{ marginTop: '16px'}}>
+                        <Card.Header>Folders and files</Card.Header>
                         <Card.Body>
                             {
                                 (course?.userIsModerator || course?.userIsOwner) &&

@@ -64,7 +64,7 @@ const FolderModal = ({ show, courseId, parentFolderId, closeModal, reloadFolders
                 </Form>
             </Modal.Body>
             <Modal.Footer>
-                <Button variant="secondary" onClick={() => closeModal}>
+                <Button variant="secondary" onClick={closeModal}>
                     Close
                 </Button>
                 <Button
