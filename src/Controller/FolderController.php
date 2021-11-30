@@ -34,6 +34,7 @@ class FolderController extends AbstractApiController
     {
         $folders = $repo->findBy([
             'course' => $request->get('courseId'),
+            'parentFolder' => null,
         ]);
 
         $dto = $this->folderDtoTransformer->transformFromObjects($folders);

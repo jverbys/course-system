@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\CourseRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -143,7 +144,7 @@ class Course
      */
     public function getFolders(): Collection
     {
-        return $this->folders;
+        return $this->folders->matching(Criteria::create()->where(Criteria::expr()->eq('parentFolder', null)));
     }
 
     public function addFolder(Folder $folder): self
