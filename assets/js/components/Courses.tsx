@@ -2,6 +2,7 @@ import React, {ChangeEvent, useState} from "react";
 import {Button, Card, Form, Modal} from "react-bootstrap";
 import CourseList from "./CourseList";
 import DateTimeSelector from "./DateTimeSelector";
+import client from "../Client";
 
 const Courses = () => {
     const [show, setShow] = useState(false);
@@ -9,9 +10,22 @@ const Courses = () => {
     const [description, setDescription] = useState('');
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
+    const [keyForRender, setKeyForRender] = useState(0);
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+
+    const createCourse = async () => {
+        client.post('/courses', {
+            name: name,
+            description: description,
+            startDate: startDate,
+            endDate: endDate,
+        }).then(() => {
+            handleClose();
+            setKeyForRender(keyForRender + 1);
+        });
+    }
 
     return (
         <>
@@ -23,7 +37,7 @@ const Courses = () => {
                     </Button>
                 </Card.Header>
                 <Card.Body>
-                    <CourseList />
+                    <CourseList key={keyForRender}/>
                 </Card.Body>
             </Card>
 
@@ -46,7 +60,8 @@ const Courses = () => {
                         <Form.Group className="mb-3">
                             <Form.Label>Description</Form.Label>
                             <Form.Control
-                                type="text"
+                                as="textarea"
+                                rows={4}
                                 placeholder="Description"
                                 onChange={(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
                                     setDescription(e.target.value)}
@@ -68,7 +83,10 @@ const Courses = () => {
                     <Button variant="secondary" onClick={handleClose}>
                         Close
                     </Button>
-                    <Button variant="primary" onClick={handleClose}>
+                    <Button
+                        variant="primary"
+                        onClick={createCourse}
+                        disabled={name === '' || description === '' || startDate === '' || endDate === ''}>
                         Save Changes
                     </Button>
                 </Modal.Footer>

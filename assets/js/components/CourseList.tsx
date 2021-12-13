@@ -50,7 +50,7 @@ const CourseList = () => {
     }
 
     return (
-        <ListGroup as="ol" numbered>
+        <ListGroup as="ul">
             {courses.map(course => {
                 return (
                     <CourseListItem key={course.id} course={course} changeEnrollmentStatus={changeEnrollmentStatus} />
