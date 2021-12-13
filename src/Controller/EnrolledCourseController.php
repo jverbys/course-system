@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/api/enrolled-courses", name="created_course_")
+ * @Route("/api/enrolled-courses", name="enrolled_course_")
  */
 class EnrolledCourseController extends AbstractApiController
 {
