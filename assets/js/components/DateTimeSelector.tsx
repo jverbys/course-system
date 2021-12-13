@@ -12,7 +12,7 @@ const DateTimeSelector = ({ setDate, placeholder }: Props) => {
         <Datetime
             dateFormat={'YYYY-MM-DD'}
             timeFormat={'HH:mm:ss'}
-            inputProps={{ placeholder: placeholder ?? ''}}
+            inputProps={{ placeholder: placeholder ?? '', readOnly: true }}
             onChange={(date: any) => setDate(date.format('YYYY-MM-DD HH:mm:ss'))}
         />
     )

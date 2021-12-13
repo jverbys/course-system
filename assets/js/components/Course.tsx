@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {useParams} from "react-router-dom";
+import {useParams, useNavigate} from "react-router-dom";
 import {Button, Card} from "react-bootstrap";
 import Folder from "./Folder";
 import FolderModal from "./FolderModal";
@@ -37,6 +37,7 @@ const Course = () => {
     const [folders, setFolders] = useState<IFolder[]>([]);
     const [folderModalOpen, setFolderModalOpen] = useState(false);
     const [parentFolderId, setParentFolderId] = useState<number>();
+    const navigate = useNavigate();
 
     useEffect(() => {
         const getCourse = async () => {
@@ -79,6 +80,13 @@ const Course = () => {
             });
     }
 
+    const deleteCourse = async () => {
+        await client.delete(`/courses/${course?.id}`)
+            .then(() => {
+                navigate('/');
+            });
+    }
+
     return (
         <>
             <Card>
@@ -95,7 +103,21 @@ const Course = () => {
                 </Card.Header>
                 <Card.Body>
                     <Card>
-                        <Card.Header>Course information</Card.Header>
+                        <Card.Header className="d-flex justify-content-between align-items-center">
+                            Course information
+
+                            {
+                                course?.userIsOwner &&
+                                <Button
+                                    variant="danger"
+                                    style={{ marginLeft: '10px' }}
+                                    size="sm"
+                                    onClick={() => { if (window.confirm('Are you sure ?')) deleteCourse() }}
+                                >
+                                    Delete
+                                </Button>
+                            }
+                        </Card.Header>
                         <Card.Body>
                             <div>{course?.description}</div>
                             <div>Starts: {course?.startDate}</div>
