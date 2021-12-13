@@ -16,12 +16,16 @@ export interface ICourseIndex {
     userIsEnrolled: boolean,
 }
 
-const CourseList = () => {
+type Props = {
+    indexUrl: string,
+}
+
+const CourseList = ({ indexUrl }: Props) => {
     const [courses, setCourses] = useState<ICourseIndex[]>([]);
 
     useEffect(() => {
         const getCourses = async () => {
-            return await client.get('/courses');
+            return await client.get(indexUrl);
         }
 
         getCourses().then(response => {
@@ -56,6 +60,11 @@ const CourseList = () => {
                     <CourseListItem key={course.id} course={course} changeEnrollmentStatus={changeEnrollmentStatus} />
                 )
             })}
+
+            {
+                courses.length === 0 &&
+                'List is empty'
+            }
         </ListGroup>
     )
 }

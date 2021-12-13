@@ -4,7 +4,13 @@ import CourseList from "./CourseList";
 import DateTimeSelector from "./DateTimeSelector";
 import client from "../Client";
 
-const Courses = () => {
+type Props = {
+    indexUrl: string,
+    title: string,
+    showCreate: boolean,
+}
+
+const Courses = ({ indexUrl, title, showCreate }: Props) => {
     const [show, setShow] = useState(false);
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
@@ -31,13 +37,16 @@ const Courses = () => {
         <>
             <Card>
                 <Card.Header className="d-flex justify-content-between align-items-center">
-                    Courses
-                    <Button variant="primary" size="sm" onClick={handleShow}>
-                        Create
-                    </Button>
+                    {title}
+                    {
+                        showCreate &&
+                        <Button variant="primary" size="sm" onClick={handleShow}>
+                            Create
+                        </Button>
+                    }
                 </Card.Header>
                 <Card.Body>
-                    <CourseList key={keyForRender}/>
+                    <CourseList indexUrl={indexUrl} key={keyForRender} />
                 </Card.Body>
             </Card>
 
