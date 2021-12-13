@@ -1,5 +1,5 @@
 import React from "react";
-import {Container, Nav, Navbar, NavDropdown} from "react-bootstrap";
+import {Container, Nav, Navbar} from "react-bootstrap";
 import {BrowserRouter as Router, Link, NavLink, Route, Routes} from "react-router-dom";
 import Courses from "./components/Courses";
 import Course from "./components/Course";
