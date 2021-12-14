@@ -5,8 +5,11 @@ import Folder from "./Folder";
 import FolderModal from "./FolderModal";
 import client from "../Client";
 import FolderModalOpenBtn from "./FolderModalOpenBtn";
+import CourseEditModal from "./CourseEditModal";
+import {Simulate} from "react-dom/test-utils";
+import load = Simulate.load;
 
-interface ICourse {
+export interface ICourse {
     id: number,
     name: string,
     description: string,
@@ -38,6 +41,8 @@ const Course = () => {
     const [folderModalOpen, setFolderModalOpen] = useState(false);
     const [parentFolderId, setParentFolderId] = useState<number>();
     const navigate = useNavigate();
+    const [courseEditModalOpen, setCourseEditModalOpen] = useState(false);
+    const [courseForEdit, setCourseForEdit] = useState<ICourse>();
 
     useEffect(() => {
         const getCourse = async () => {
@@ -46,6 +51,7 @@ const Course = () => {
 
         getCourse().then(response => {
             setCourse(response.data);
+            setCourseForEdit(response.data);
             setFolders(response.data.folders);
         });
     }, []);
@@ -65,6 +71,8 @@ const Course = () => {
                 existingCourse.userIsEnrolled = !existingCourse.userIsEnrolled;
                 // @ts-ignore
                 setCourse(existingCourse);
+                // @ts-ignore
+                setCourseForEdit(existingCourse);
             });
     }
 
@@ -87,6 +95,37 @@ const Course = () => {
             });
     }
 
+    const updateCourseProp = (prop: string, value: string) => {
+        let existingCourse = {
+            ...courseForEdit
+        };
+
+        // @ts-ignore
+        existingCourse[prop] = value;
+
+        // @ts-ignore
+        setCourseForEdit(existingCourse);
+    }
+
+    const updateCourse = async () => {
+        await client.patch(`/courses/${course?.id}`, {
+            name: courseForEdit?.name,
+            description: courseForEdit?.description,
+            startDate: courseForEdit?.startDate,
+            endDate: courseForEdit?.endDate,
+        }).then(response => {
+            setCourse(response.data);
+            setCourseForEdit(response.data);
+            setFolders(response.data.folders);
+
+            setCourseEditModalOpen(false);
+        });
+    }
+
+    const closeCourseEditModal = () => {
+        setCourseEditModalOpen(false);
+    }
+
     return (
         <>
             <Card>
@@ -106,17 +145,30 @@ const Course = () => {
                         <Card.Header className="d-flex justify-content-between align-items-center">
                             Course information
 
-                            {
-                                course?.userIsOwner &&
-                                <Button
-                                    variant="danger"
-                                    style={{ marginLeft: '10px' }}
-                                    size="sm"
-                                    onClick={() => { if (window.confirm('Are you sure ?')) deleteCourse() }}
-                                >
-                                    Delete
-                                </Button>
-                            }
+                            <div>
+                                {
+                                    (course?.userIsModerator || course?.userIsOwner) &&
+                                    <Button
+                                        variant="success"
+                                        size="sm"
+                                        onClick={() => setCourseEditModalOpen(true) }
+                                    >
+                                        Edit
+                                    </Button>
+                                }
+
+                                {
+                                    course?.userIsOwner &&
+                                    <Button
+                                        variant="danger"
+                                        style={{ marginLeft: '10px' }}
+                                        size="sm"
+                                        onClick={() => { if (window.confirm('Are you sure ?')) deleteCourse() }}
+                                    >
+                                        Delete
+                                    </Button>
+                                }
+                            </div>
                         </Card.Header>
                         <Card.Body>
                             <div>{course?.description}</div>
@@ -152,6 +204,14 @@ const Course = () => {
                 parentFolderId={parentFolderId}
                 closeModal={changeFolderModalVisibility}
                 reloadFolders={reloadFolders}
+            />
+
+            <CourseEditModal
+                show={courseEditModalOpen}
+                course={courseForEdit}
+                updateCourseProp={updateCourseProp}
+                updateCourse={updateCourse}
+                closeModal={closeCourseEditModal}
             />
         </>
     )
