@@ -72,32 +72,20 @@ class CourseController extends AbstractApiController
     }
 
     /**
-     * @Route("/courses/{courseId}", methods={"GET"}, name="show")
+     * @Route("/courses/{course}", methods={"GET"}, name="show")
      */
-    public function showAction(Request $request, CourseRepository $repo): Response
+    public function showAction(Course $course): Response
     {
-        $course = $repo->find($request->get('courseId'));
-
-        if (!$course) {
-            return $this->respond('Course not found!', Response::HTTP_NOT_FOUND);
-        }
-
         $dto = $this->courseDtoTransformer->transformFromObject($course);
 
         return $this->respond($dto);
     }
 
     /**
-     * @Route("/courses/{courseId}", methods={"PATCH"}, name="update")
+     * @Route("/courses/{course}", methods={"PATCH"}, name="update")
      */
-    public function updateAction(Request $request, CourseRepository $repo, EntityManagerInterface $em): Response
+    public function updateAction(Course $course, Request $request, EntityManagerInterface $em): Response
     {
-        $course = $repo->find($request->get('courseId'));
-
-        if (!$course) {
-            return $this->respond('Course not found!', Response::HTTP_NOT_FOUND);
-        }
-
         $form = $this->buildForm(CourseType::class, $course, [
             'method' => $request->getMethod(),
         ]);
@@ -119,16 +107,10 @@ class CourseController extends AbstractApiController
     }
 
     /**
-     * @Route("/courses/{courseId}", methods={"DELETE"}, name="delete")
+     * @Route("/courses/{course}", methods={"DELETE"}, name="delete")
      */
-    public function deleteAction(Request $request, CourseRepository $repo, EntityManagerInterface $em): Response
+    public function deleteAction(Course $course, EntityManagerInterface $em): Response
     {
-        $course = $repo->find($request->get('courseId'));
-
-        if (!$course) {
-            return $this->respond('Course not found!', Response::HTTP_NOT_FOUND);
-        }
-
         $em->remove($course);
         $em->flush();
 
