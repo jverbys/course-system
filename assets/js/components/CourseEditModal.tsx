@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React from "react";
 import {ICourse} from "./Course";
 import {Button, Form, Modal} from "react-bootstrap";
 import DateTimeSelector from "./DateTimeSelector";
@@ -69,7 +69,7 @@ const CourseEditModal = ({ show, course, updateCourseProp, updateCourse, closeMo
                     }
                     onClick={() => updateCourse()}
                 >
-                    Create
+                    Save Changes
                 </Button>
             </Modal.Footer>
         </Modal>
