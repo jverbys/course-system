@@ -5,11 +5,10 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Dto\Response\Transformer\FolderDtoTransformer;
+use App\Entity\Course;
 use App\Entity\Folder;
 use App\Entity\User;
 use App\Form\FolderType;
-use App\Repository\CourseRepository;
-use App\Repository\FolderRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,14 +27,11 @@ class FolderController extends AbstractApiController
     }
 
     /**
-     * @Route("/courses/{courseId}/folders", methods={"GET"}, name="index")
+     * @Route("/courses/{course}/folders", methods={"GET"}, name="index")
      */
-    public function indexAction(Request $request, FolderRepository $repo): Response
+    public function indexAction(Course $course): Response
     {
-        $folders = $repo->findBy([
-            'course' => $request->get('courseId'),
-            'parentFolder' => null,
-        ]);
+        $folders = $course->getFolders();
 
         $dto = $this->folderDtoTransformer->transformFromObjects($folders);
 
@@ -43,16 +39,10 @@ class FolderController extends AbstractApiController
     }
 
     /**
-     * @Route("/courses/{courseId}/folders", methods={"POST"}, name="create")
+     * @Route("/courses/{course}/folders", methods={"POST"}, name="create")
      */
-    public function createAction(Request $request, CourseRepository $repo, EntityManagerInterface $em): Response
+    public function createAction(Request $request, Course $course, EntityManagerInterface $em): Response
     {
-        $course = $repo->find($request->get('courseId'));
-
-        if (!$course) {
-            return $this->respond('Course not found!', Response::HTTP_NOT_FOUND);
-        }
-
         $form = $this->buildForm(FolderType::class);
 
         $form->handleRequest($request);
@@ -87,36 +77,20 @@ class FolderController extends AbstractApiController
     }
 
     /**
-     * @Route("/folders/{folderId}", methods={"GET"}, name="show")
+     * @Route("/folders/{folder}", methods={"GET"}, name="show")
      */
-    public function showAction(Request $request, FolderRepository $repo): Response
+    public function showAction(Folder $folder): Response
     {
-        $folder = $repo->findOneBy([
-            'id' => $request->get('folderId'),
-        ]);
-
-        if (!$folder) {
-            return $this->respond('Folder not found!', Response::HTTP_NOT_FOUND);
-        }
-
         $dto = $this->folderDtoTransformer->transformFromObject($folder);
 
         return $this->respond($dto);
     }
 
     /**
-     * @Route("/folders/{folderId}", methods={"PATCH"}, name="update")
+     * @Route("/folders/{folder}", methods={"PATCH"}, name="update")
      */
-    public function updateAction(Request $request, FolderRepository $repo, EntityManagerInterface $em): Response
+    public function updateAction(Request $request, Folder $folder, EntityManagerInterface $em): Response
     {
-        $folder = $repo->findOneBy([
-            'id' => $request->get('folderId'),
-        ]);
-
-        if (!$folder) {
-            return $this->respond('Folder not found!', Response::HTTP_NOT_FOUND);
-        }
-
         $form = $this->buildForm(FolderType::class, $folder, [
             'method' => $request->getMethod(),
         ]);
@@ -145,18 +119,10 @@ class FolderController extends AbstractApiController
     }
 
     /**
-     * @Route("/folders/{folderId}", methods={"DELETE"}, name="delete")
+     * @Route("/folders/{folder}", methods={"DELETE"}, name="delete")
      */
-    public function deleteAction(Request $request, FolderRepository $repo, EntityManagerInterface $em): Response
+    public function deleteAction(Folder $folder, EntityManagerInterface $em): Response
     {
-        $folder = $repo->findOneBy([
-            'id' => $request->get('folderId'),
-        ]);
-
-        if (!$folder) {
-            return $this->respond('Folder not found!', Response::HTTP_NOT_FOUND);
-        }
-
         $em->remove($folder);
         $em->flush();
 

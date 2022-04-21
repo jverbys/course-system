@@ -6,9 +6,8 @@ namespace App\Controller;
 
 use App\Dto\Response\Transformer\FileDtoTransformer;
 use App\Entity\File;
+use App\Entity\Folder;
 use App\Form\FileType;
-use App\Repository\FileRepository;
-use App\Repository\FolderRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,13 +26,11 @@ class FileController extends AbstractApiController
     }
 
     /**
-     * @Route("/folders/{folderId}/files", methods={"GET"}, name="index")
+     * @Route("/folders/{folder}/files", methods={"GET"}, name="index")
      */
-    public function indexAction(Request $request, FileRepository $repo): Response
+    public function indexAction(Folder $folder): Response
     {
-        $files = $repo->findBy([
-            'folder' => $request->get('folderId'),
-        ]);
+        $files = $folder->getFiles();
 
         $dto = $this->fileDtoTransformer->transformFromObjects($files);
 
@@ -41,16 +38,10 @@ class FileController extends AbstractApiController
     }
 
     /**
-     * @Route("/folders/{folderId}/files", methods={"POST"}, name="create")
+     * @Route("/folders/{folder}/files", methods={"POST"}, name="create")
      */
-    public function createAction(Request $request, FolderRepository $repo, EntityManagerInterface $em): Response
+    public function createAction(Request $request, Folder $folder, EntityManagerInterface $em): Response
     {
-        $folder = $repo->find($request->get('folderId'));
-
-        if (!$folder) {
-            return $this->respond('Folder not found!', Response::HTTP_NOT_FOUND);
-        }
-
         $form = $this->buildForm(FileType::class);
 
         $form->handleRequest($request);
@@ -74,36 +65,20 @@ class FileController extends AbstractApiController
     }
 
     /**
-     * @Route("/files/{fileId}", methods={"GET"}, name="show")
+     * @Route("/files/{file}", methods={"GET"}, name="show")
      */
-    public function showAction(Request $request, FileRepository $repo): Response
+    public function showAction(File $file): Response
     {
-        $file = $repo->findOneBy([
-            'id' => $request->get('fileId'),
-        ]);
-
-        if (!$file) {
-            return $this->respond('File not found!', Response::HTTP_NOT_FOUND);
-        }
-
         $dto = $this->fileDtoTransformer->transformFromObject($file);
 
         return $this->respond($dto);
     }
 
     /**
-     * @Route("/files/{fileId}", methods={"DELETE"}, name="delete")
+     * @Route("/files/{file}", methods={"DELETE"}, name="delete")
      */
-    public function deleteAction(Request $request, FileRepository $repo, EntityManagerInterface $em): Response
+    public function deleteAction(File $file, EntityManagerInterface $em): Response
     {
-        $file = $repo->findOneBy([
-            'id' => $request->get('fileId'),
-        ]);
-
-        if (!$file) {
-            return $this->respond('File not found!', Response::HTTP_NOT_FOUND);
-        }
-
         $em->remove($file);
         $em->flush();
 
